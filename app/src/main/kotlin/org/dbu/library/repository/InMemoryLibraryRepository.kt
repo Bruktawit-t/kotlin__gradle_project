@@ -5,8 +5,48 @@ import org.dbu.library.model.Patron
 
 class InMemoryLibraryRepository : LibraryRepository {
 
-    private val books = mutableMapOf<String, Book>()
-    private val patrons = mutableMapOf<String, Patron>()
+    private val books = mutableListOf<Book>()
+    private val patrons = mutableListOf<Patron>()
 
-    TODO: Implement the methods to manage books and patrons in memory
+    override fun addBook(book: Book): Boolean {
+        if (books.any { it.isbn == book.isbn }) return false
+        books.add(book)
+        return true
+    }
+
+    override fun findBook(isbn: String): Book? {
+        return books.find { it.isbn == isbn }
+    }
+
+    override fun updateBook(book: Book) {
+        val index = books.indexOfFirst { it.isbn == book.isbn }
+        if (index != -1) {
+            books[index] = book
+        }
+    }
+
+    override fun addPatron(patron: Patron): Boolean {
+        if (patrons.any { it.id == patron.id }) return false
+        patrons.add(patron)
+        return true
+    }
+
+    override fun findPatron(id: String): Patron? {
+        return patrons.find { it.id == id }
+    }
+
+    override fun updatePatron(patron: Patron) {
+        val index = patrons.indexOfFirst { it.id == patron.id }
+        if (index != -1) {
+            patrons[index] = patron
+        }
+    }
+
+    override fun getAllBooks(): List<Book> {
+        return books
+    }
+
+    override fun getAllPatrons(): List<Patron> {
+        return patrons
+    }
 }
